@@ -802,7 +802,9 @@ require('lazy').setup({
       local servers = {
         clangd = {},
         -- gopls = {},
-        pyright = {},
+        -- pyright = { --currently not working. will debug it later, if required.
+        -- cmd = { '/snap/bin/pyright-langserver', '--stdio' },
+        -- },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --

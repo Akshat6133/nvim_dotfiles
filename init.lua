@@ -117,6 +117,12 @@ vim.keymap.set('n', '<Leader>dl', function()
   require('dap').run_last()
 end, { desc = 'Run Last' })
 
+-- -- Delete previous word with Ctrl + Backspace
+-- vim.api.nvim_set_keymap('i', '<C-BS>', '<C-w>', { noremap = true, silent = true })
+--
+-- -- Delete next word with Ctrl + Delete
+-- vim.api.nvim_set_keymap('i', '<C-Del>', '<Esc>diw', { noremap = true, silent = true })
+
 function CompileAndRun()
   -- Get the current file and its extension
   local file = vim.fn.expand '%'
@@ -189,6 +195,23 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- For markdown preview
+vim.api.nvim_set_keymap('n', '<leader>mp', ':terminal env GIT_CONFIG_NOSYSTEM=1 mdless %<CR>', { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>ar', ':!as % -o %<.o && ld %<.o -o %< && ./%<<CR>', { noremap = true, silent = true })
+
+-- " Custom fold settings for assembly
+-- autocmd FileType asm setlocal foldmethod=indent foldlevel=1
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'asm',
+  callback = function()
+    vim.opt_local.foldmethod = 'indent'
+    vim.opt_local.foldlevel = 1
+  end,
+})
+
+-- # nvim-dap* plugin configuration is yet to be done
+
 -----------------------------------------------------------------------------------------------------------------
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
@@ -223,7 +246,7 @@ end)
 vim.opt.breakindent = true
 
 -- Save undo history
-vim.opt.undofile = true
+-- vim.opt.undofile = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
@@ -373,6 +396,27 @@ require('lazy').setup({
   --  config = function() ... end
 
   ---------------------------------------------------------------------------------------------------------------------
+  {
+    'xeluxee/competitest.nvim',
+    dependencies = 'MunifTanjim/nui.nvim',
+    config = function()
+      require('competitest').setup {
+        received_problems_path = '$(HOME)/CP/$(JUDGE)/$(CONTEST)/$(PROBLEM).$(FEXT)',
+        template_file = '$(HOME)/CP/template.$(FEXT)',
+        testcases_use_single_file = true,
+      }
+      vim.keymap.set('n', '<space>cpr', '<cmd>CompetiTest receive problem<CR>')
+      vim.keymap.set('n', '<space>cat', '<cmd>CompetiTest add testcase<CR>')
+      vim.keymap.set('n', '<space>cet', '<cmd>CompetiTest edit testcase<CR>')
+      vim.keymap.set('n', '<space>cr', '<cmd>CompetiTest run<CR>')
+    end,
+  },
+
+  {
+    'JamshedVesuna/vim-markdown-preview',
+    ft = 'markdown',
+  },
+
   {
     'Pocco81/auto-save.nvim',
     config = function()
@@ -775,13 +819,13 @@ require('lazy').setup({
       })
 
       -- Change diagnostic symbols in the sign column (gutter)
-      -- if vim.g.have_nerd_font then
-      --   local signs = { Error = '', Warn = '', Hint = '', Info = '' }
-      --   for type, icon in pairs(signs) do
-      --     local hl = 'DiagnosticSign' .. type
-      --     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-      --   end
-      -- end
+      if vim.g.have_nerd_font then
+        local signs = { Error = '', Warn = '', Hint = '', Info = '' }
+        for type, icon in pairs(signs) do
+          local hl = 'DiagnosticSign' .. type
+          vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+        end
+      end
 
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP specification.
@@ -803,7 +847,7 @@ require('lazy').setup({
         clangd = {},
         -- gopls = {},
         -- pyright = { --currently not working. will debug it later, if required.
-        -- cmd = { '/snap/bin/pyright-langserver', '--stdio' },
+        --   cmd = { '/snap/bin/pyright-langserver', '--stdio' },
         -- },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -979,9 +1023,9 @@ require('lazy').setup({
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(),
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          -- ['<CR>'] = cmp.mapping.confirm { select = true },
+          -- ['<Tab>'] = cmp.mapping.select_next_item(),
+          -- ['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
@@ -1101,7 +1145,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'asm' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {

@@ -179,8 +179,8 @@ vim.o.expandtab = true -- Use spaces instead of tabs
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'c', 'cpp' },
   callback = function()
-    vim.bo.tabstop = 2
-    vim.bo.shiftwidth = 2
+    vim.bo.tabstop = 4
+    vim.bo.shiftwidth = 4
     vim.bo.expandtab = true
   end,
 })
@@ -908,13 +908,16 @@ require('lazy').setup({
 
   { -- Autoformat
     'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
+    -- event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
     keys = {
       {
         '<leader>f',
         function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
+          require('conform').format { async = true,
+
+            -- lsp_format = 'fallback'   --Manually comment out 
+          }
         end,
         mode = '',
         desc = '[F]ormat buffer',
@@ -923,21 +926,23 @@ require('lazy').setup({
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
+      format_on_save = nil
+
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
         -- local disable_filetypes = { c = true, cpp = true }
-        local disable_filetypes = {}
-        local lsp_format_opt
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          lsp_format_opt = 'never'
-        else
-          lsp_format_opt = 'fallback'
-        end
-        return {
-          timeout_ms = 500,
-          lsp_format = lsp_format_opt,
-        }
+        -- local disable_filetypes = {}
+        -- local lsp_format_opt
+        -- if disable_filetypes[vim.bo[bufnr].filetype] then
+        --   lsp_format_opt = 'never'
+        -- else
+        --   lsp_format_opt = 'fallback'
+        -- end
+        -- return {
+        --   timeout_ms = 500,
+        --   lsp_format = lsp_format_opt,
+        -- }
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
@@ -1079,7 +1084,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      -- vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'tokyonight-night'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -1093,7 +1098,7 @@ require('lazy').setup({
     event = { 'ColorSchemePre' }, -- if you want to lazy load
     dependencies = { 'tjdevries/colorbuddy.nvim', tag = 'v1.0.0' },
     init = function()
-      require('colorbuddy').colorscheme 'cobalt2'
+      -- require('colorbuddy').colorscheme 'cobalt2'
     end,
   },
 

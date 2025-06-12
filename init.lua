@@ -294,7 +294,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
---
+
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
@@ -845,7 +845,23 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
-        -- gopls = {},
+        
+
+	gopls = {},
+gopls = {
+    settings = {
+      gopls = {
+        usePlaceholders = true,
+        completeUnimported = true,
+        analyses = {
+          unusedparams = true,
+          shadow = true,
+        },
+      },
+    },
+  },
+
+
         -- pyright = { --currently not working. will debug it later, if required.
         --   cmd = { '/snap/bin/pyright-langserver', '--stdio' },
         -- },
@@ -894,7 +910,9 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
-            local server = servers[server_name] or {}
+            local server = servers[server_name] or {
+              -- zls = {},
+            }
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
@@ -950,7 +968,7 @@ require('lazy').setup({
         python = { 'isort', 'black' },
         c = { 'clang_format' }, -- Add clang-format for C
         cpp = { 'clang_format' }, -- Add clang-format for C++
-        --
+        go = {"goimports", "gofmt"},
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
@@ -977,15 +995,18 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').load({
+                -- paths = {vim.fn.stdpath("config").."/my_snippets"}
+                paths = {vim.fn.expand("~/.config/nvim/my_snippets")}
+              })
+            end,
+          },
         },
       },
-      'saadparwaiz1/cmp_luasnip',
+      -- 'saadparwaiz1/cmp_luasnip',
 
       -- Adds other completion capabilities.
       --  nvim-cmp does not ship with all sources by default. They are split
@@ -1098,7 +1119,7 @@ require('lazy').setup({
     event = { 'ColorSchemePre' }, -- if you want to lazy load
     dependencies = { 'tjdevries/colorbuddy.nvim', tag = 'v1.0.0' },
     init = function()
-      -- require('colorbuddy').colorscheme 'cobalt2'
+       require('colorbuddy').colorscheme 'cobalt2'
     end,
   },
 
@@ -1150,7 +1171,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'asm' },
+      ensure_installed = {"go", "gomod", 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'asm' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {

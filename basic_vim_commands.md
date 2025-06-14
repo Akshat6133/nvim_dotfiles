@@ -257,3 +257,48 @@ To reverse this change, you can hide the hidden characters again by using the co
 # vim 8.2+ basic autocomplete
 <C-n>
 
+Switching Between Split Windows in Vim
+1
+Vim allows you to split your workspace into multiple windows, either horizontally or vertically, to enhance productivity. Once you have multiple split windows, you need to know how to navigate between them efficiently.
+
+Navigating Between Split Windows
+
+To switch between split windows in Vim, you can use the following key combinations:
+
+Move to the left window: Press Ctrl + w followed by h
+
+Move to the window below: Press Ctrl + w followed by j
+
+Move to the window above: Press Ctrl + w followed by k
+
+Move to the right window: Press Ctrl + w followed by l
+
+These commands allow you to move your cursor to the desired window, making it the active window.
+
+Creating Split Windows
+
+If you need to create split windows, here are the commands:
+
+Vertical split: Enter Normal mode and run :vsplit [file_path] or use the shortcut Ctrl + w followed by v. This will split the window vertically and optionally open a specified file.
+
+Horizontal split: Enter Normal mode and run :split [file_path] or use the shortcut Ctrl + w followed by s. This will split the window horizontally and optionally open a specified file.
+
+Resizing Split Windows
+
+You can also resize the split windows to better suit your needs:
+
+Increase height: Press Ctrl + w followed by +
+
+Decrease height: Press Ctrl + w followed by -
+
+Increase width: Press Ctrl + w followed by >
+
+Decrease width: Press Ctrl + w followed by <
+
+To expand a window as much as possible, use:
+
+Expand vertically: Press Ctrl + w followed by |
+
+Expand horizontally: Press Ctrl + w followed by _
+
+To reset the size of all split windows to be equal, press Ctrl + w followed by =.

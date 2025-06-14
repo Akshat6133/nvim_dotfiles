@@ -91,8 +91,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -----------------------------------------------------------------------------------------------------------------
+--vim.keymap.set("n", "<leader>?", require("telescope.builtin").keymaps, { desc = "Find Keymaps" })
 vim.o.guifont = 'Fira Code Nerd Font:h14' -- Adjust the size as needed
-
 vim.keymap.set('n', '<C-_>', '<Plug>(comment_toggle_linewise_current)')
 vim.keymap.set('x', '<C-_>', '<Plug>(comment_toggle_linewise_visual)')
 vim.keymap.set('n', '<F5>', function()
@@ -171,9 +171,10 @@ end
 vim.keymap.set('n', '<F6>', CompileAndRun, { noremap = true, silent = true, desc = 'Compile and Run' })
 
 -- Global indentation settings
-vim.o.tabstop = 2 -- Number of spaces a tab counts for
-vim.o.shiftwidth = 2 -- Number of spaces to use for each step of (auto)indent
-vim.o.expandtab = true -- Use spaces instead of tabs
+vim.o.tabstop = 4 -- Number of spaces a tab counts for
+vim.o.shiftwidth = 4 -- Number of spaces to use for each step of (auto)indent
+-- vim.o.expandtab = true -- Use spaces instead of tabs
+vim.o.expandtab = false-- Use spaces instead of tabs
 
 -- File type specific settings
 vim.api.nvim_create_autocmd('FileType', {
@@ -181,7 +182,7 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     vim.bo.tabstop = 4
     vim.bo.shiftwidth = 4
-    vim.bo.expandtab = true
+    -- vim.bo.expandtab = true
   end,
 })
 
@@ -216,6 +217,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
+--vim.api.nvim_set_hl(0, "Normal" , {bg=#282828})
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -270,7 +272,9 @@ vim.opt.splitbelow = true
 --  See `:help 'list'`
 --  and `:help 'listchars'`
 vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '▸ ',
+  -- trail = '·',
+  nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
@@ -847,7 +851,7 @@ require('lazy').setup({
         clangd = {},
         
 
-	gopls = {},
+--	gopls = {},
 gopls = {
     settings = {
       gopls = {
@@ -862,8 +866,8 @@ gopls = {
   },
 
 
-        -- pyright = { --currently not working. will debug it later, if required.
-        --   cmd = { '/snap/bin/pyright-langserver', '--stdio' },
+        pyright = { --currently  working. will debug it later, if required.
+        --   cmd = { '/snap/bin/pyright-langserver', '--stdio'  it is old and now no snap dependency is required},
         -- },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -874,7 +878,7 @@ gopls = {
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-
+      },
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -1120,6 +1124,7 @@ gopls = {
     dependencies = { 'tjdevries/colorbuddy.nvim', tag = 'v1.0.0' },
     init = function()
        require('colorbuddy').colorscheme 'cobalt2'
+      -- vim.api.nvim_set_hl(0, "Normal" , {bg=#282828})
     end,
   },
 
@@ -1211,7 +1216,7 @@ gopls = {
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  { import = 'custom.plugins' },
+  { import = 'acoder.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!

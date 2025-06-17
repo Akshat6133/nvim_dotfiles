@@ -198,7 +198,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 -- For markdown preview
 vim.api.nvim_set_keymap('n', '<leader>mp', ':terminal env GIT_CONFIG_NOSYSTEM=1 mdless %<CR>', { noremap = true, silent = true })
-
+--
 vim.api.nvim_set_keymap('n', '<leader>ar', ':!as % -o %<.o && ld %<.o -o %< && ./%<<CR>', { noremap = true, silent = true })
 
 -- " Custom fold settings for assembly
@@ -1176,7 +1176,9 @@ gopls = {
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = {"go", "gomod", 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'asm' },
+      ensure_installed = {"go", "gomod", 'bash', 'c', 'diff', 'html', 'lua', 'luadoc',
+        'markdown', 'markdown_inline',
+        'query', 'vim', 'vimdoc', 'asm' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1243,6 +1245,18 @@ gopls = {
     },
   },
 })
+
+
+-- Disable broken lint trigger
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.b.markdownlint_disabled = true
+  end,
+})
+
+-- Manual markdownlint-cli2 run
+vim.api.nvim_set_keymap('n', '<leader>ml', ':!markdownlint-cli2 %<CR>', { noremap = true, silent = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

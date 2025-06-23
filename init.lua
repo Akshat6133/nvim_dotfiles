@@ -89,235 +89,18 @@ P.S. You can delete this when you're done too. It's your config now! :)
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+-- vim.cmd("source ~/.vimrc")
 
------------------------------------------------------------------------------------------------------------------
---vim.keymap.set("n", "<leader>?", require("telescope.builtin").keymaps, { desc = "Find Keymaps" })
-vim.o.guifont = 'Fira Code Nerd Font:h14' -- Adjust the size as needed
-vim.keymap.set('n', '<C-_>', '<Plug>(comment_toggle_linewise_current)')
-vim.keymap.set('x', '<C-_>', '<Plug>(comment_toggle_linewise_visual)')
-vim.keymap.set('n', '<F5>', function()
-  require('dap').continue()
-end, { desc = 'Start/Continue Debugging' })
-vim.keymap.set('n', '<F10>', function()
-  require('dap').step_over()
-end, { desc = 'Step Over' })
-vim.keymap.set('n', '<F11>', function()
-  require('dap').step_into()
-end, { desc = 'Step Into' })
-vim.keymap.set('n', '<F12>', function()
-  require('dap').step_out()
-end, { desc = 'Step Out' })
-vim.keymap.set('n', '<Leader>b', function()
-  require('dap').toggle_breakpoint()
-end, { desc = 'Toggle Breakpoint' })
-vim.keymap.set('n', '<Leader>dr', function()
-  require('dap').repl.open()
-end, { desc = 'Open REPL' })
-vim.keymap.set('n', '<Leader>dl', function()
-  require('dap').run_last()
-end, { desc = 'Run Last' })
-
--- -- Delete previous word with Ctrl + Backspace
--- vim.api.nvim_set_keymap('i', '<C-BS>', '<C-w>', { noremap = true, silent = true })
---
--- -- Delete next word with Ctrl + Delete
--- vim.api.nvim_set_keymap('i', '<C-Del>', '<Esc>diw', { noremap = true, silent = true })
-
-function CompileAndRun()
-  -- Get the current file and its extension
-  local file = vim.fn.expand '%'
-  local file_extension = vim.fn.expand '%:e'
-  local output = vim.fn.getcwd() .. '/a.out' -- Default output for compiled languages
-
-  -- Define commands based on file type
-  local cmd
-  if file_extension == 'c' then
-    cmd = string.format('clang %s -o %s && %s', file, output, output)
-  elseif file_extension == 'cpp' then
-    cmd = string.format('clang++ %s -o %s && %s', file, output, output)
-  elseif file_extension == 'py' then
-    cmd = string.format('python3 %s', file)
-  else
-    print 'Unsupported file type!'
-    return
-  end
-
-  -- Run the command in a terminal split
-  vim.cmd('botright split | resize 10 | term ' .. cmd)
-end
-
--- function CompileAndRun()
---   -- Get the current file and set the output path
---   local file = vim.fn.expand('%')
---   local output = vim.fn.getcwd() .. '/a.out' -- Output executable
-
---   -- Compile the file
---   local compile_cmd = string.format("clang %s -o %s", file, output)
---   vim.fn.jobstart(compile_cmd, {
---       on_exit = function(_, exit_code)
---           if exit_code == 0 then
---               -- Open a terminal split to show the output if compilation is successful
---               vim.cmd("botright split | resize 10 | term " .. output)
---           else
---               print("Compilation failed!")
---           end
---       end,
---       on_stderr = function(_, data)
---           print(table.concat(data, "\n"))
---       end
---   })
--- end
-
-vim.keymap.set('n', '<F6>', CompileAndRun, { noremap = true, silent = true, desc = 'Compile and Run' })
-
--- Global indentation settings
-vim.o.tabstop = 4 -- Number of spaces a tab counts for
-vim.o.shiftwidth = 4 -- Number of spaces to use for each step of (auto)indent
--- vim.o.expandtab = true -- Use spaces instead of tabs
-vim.o.expandtab = false-- Use spaces instead of tabs
-
--- File type specific settings
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'c', 'cpp' },
-  callback = function()
-    vim.bo.tabstop = 4
-    vim.bo.shiftwidth = 4
-    -- vim.bo.expandtab = true
-  end,
-})
-
--- File type specific settings
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'py' },
-  callback = function()
-    vim.bo.tabstop = 4
-    vim.bo.shiftwidth = 4
-    -- vim.bo.expandtab = true
-  end,
-})
-
--- For markdown preview
-vim.api.nvim_set_keymap('n', '<leader>mp', ':terminal env GIT_CONFIG_NOSYSTEM=1 mdless %<CR>', { noremap = true, silent = true })
---
-vim.api.nvim_set_keymap('n', '<leader>ar', ':!as % -o %<.o && ld %<.o -o %< && ./%<<CR>', { noremap = true, silent = true })
-
--- " Custom fold settings for assembly
--- autocmd FileType asm setlocal foldmethod=indent foldlevel=1
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'asm',
-  callback = function()
-    vim.opt_local.foldmethod = 'indent'
-    vim.opt_local.foldlevel = 1
-  end,
-})
-
--- # nvim-dap* plugin configuration is yet to be done
-
------------------------------------------------------------------------------------------------------------------
-
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
---vim.api.nvim_set_hl(0, "Normal" , {bg=#282828})
-
--- [[ Setting options ]]
--- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
-
--- Make line numbers default
-vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
-vim.opt.relativenumber = true
-
--- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
-
--- Don't show the mode, since it's already in the status line
-vim.opt.showmode = false
-
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
-
--- Enable break indent
-vim.opt.breakindent = true
-
--- Save undo history
--- vim.opt.undofile = true
-
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-
--- Keep signcolumn on by default
-vim.opt.signcolumn = 'yes'
-
--- Decrease update time
-vim.opt.updatetime = 250
-
--- Decrease mapped sequence wait time
--- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
-
--- Configure how new splits should be opened
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
-vim.opt.list = true
-vim.opt.listchars = { tab = '▸ ',
-  -- trail = '·',
-  nbsp = '␣' }
-
--- Preview substitutions live, as you type!
-vim.opt.inccommand = 'split'
-
--- Show which line your cursor is on
-vim.opt.cursorline = true
-
--- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+require("acoder.options")
+require("acoder.keymaps")
+require("acoder.lsp")
+require("acoder.jupyter-descending")
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
--- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
-
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -365,7 +148,7 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
-
+ 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -400,26 +183,6 @@ require('lazy').setup({
   --  config = function() ... end
 
   ---------------------------------------------------------------------------------------------------------------------
-  {
-    'xeluxee/competitest.nvim',
-    dependencies = 'MunifTanjim/nui.nvim',
-    config = function()
-      require('competitest').setup {
-        received_problems_path = '$(HOME)/CP/$(JUDGE)/$(CONTEST)/$(PROBLEM).$(FEXT)',
-        template_file = '$(HOME)/CP/template.$(FEXT)',
-        testcases_use_single_file = true,
-      }
-      vim.keymap.set('n', '<space>cpr', '<cmd>CompetiTest receive problem<CR>')
-      vim.keymap.set('n', '<space>cat', '<cmd>CompetiTest add testcase<CR>')
-      vim.keymap.set('n', '<space>cet', '<cmd>CompetiTest edit testcase<CR>')
-      vim.keymap.set('n', '<space>cr', '<cmd>CompetiTest run<CR>')
-    end,
-  },
-
-  {
-    'JamshedVesuna/vim-markdown-preview',
-    ft = 'markdown',
-  },
 
   {
     'Pocco81/auto-save.nvim',
@@ -1109,7 +872,7 @@ gopls = {
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'tokyonight'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -1118,15 +881,15 @@ gopls = {
 
   -------------------------------------------------------------------------------------------------------------------
 
-  {
-    'lalitmee/cobalt2.nvim',
-    event = { 'ColorSchemePre' }, -- if you want to lazy load
-    dependencies = { 'tjdevries/colorbuddy.nvim', tag = 'v1.0.0' },
-    init = function()
-       require('colorbuddy').colorscheme 'cobalt2'
-      -- vim.api.nvim_set_hl(0, "Normal" , {bg=#282828})
-    end,
-  },
+  -- {
+  --   'lalitmee/cobalt2.nvim',
+  --   event = { 'ColorSchemePre' }, -- if you want to lazy load
+  --   dependencies = { 'tjdevries/colorbuddy.nvim', tag = 'v1.0.0' },
+  --   init = function()
+  --      require('colorbuddy').colorscheme 'cobalt2'
+  --     -- vim.api.nvim_set_hl(0, "Normal" , {bg=#282828})
+  --   end,
+  -- },
 
   -------------------------------------------------------------------------------------------------------------------
 
@@ -1219,6 +982,7 @@ gopls = {
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   { import = 'acoder.plugins' },
+
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!

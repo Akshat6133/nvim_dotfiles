@@ -41,4 +41,5 @@ vim.opt.clipboard:append({ "unnamed", "unnamedplus" })
 vim.api.nvim_set_option("clipboard", "unnamed")
 
 --print("set is being sourced")
+print("set.lua was sourced")
 

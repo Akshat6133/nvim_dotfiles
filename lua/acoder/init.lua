@@ -1,6 +1,7 @@
 require("acoder.remap")
 require("acoder.lazy_init")
 require("acoder.set")
+require("acoder.lsp")
 
 -- DO.not
 -- DO NOT INCLUDE THIS
@@ -78,4 +79,5 @@ autocmd('LspAttach', {
 vim.g.netrw_browse_split = 0
 vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 25
+print("internal init.lua was sourced")
 

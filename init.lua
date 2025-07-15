@@ -1,4 +1,4 @@
 require("acoder")
 --print("hello world")
 
-vim.api.nvim_set_option("clipboard", "unnamed")
+--vim.api.nvim_set_option("clipboard", "unnamed")

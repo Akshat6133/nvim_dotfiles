@@ -1,4 +1,11 @@
 --print("set is being sourcing")
+-- Cursor shapes for terminal Neovim
+--vim.api.nvim_exec([[
+--  let &t_SI = "\<Esc>[5 q" " insert: blinking I-beam
+--  let &t_SR = "\<Esc>[3 q" " replace: blinking underline
+--  let &t_EI = "\<Esc>[1 q" " normal: blinking block
+--]], false)
+
 vim.opt.guicursor = ""
 
 vim.opt.nu = true
@@ -7,7 +14,7 @@ vim.opt.relativenumber = true
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+vim.opt.expandtab = false
 
 vim.opt.smartindent = true
 
@@ -29,17 +36,17 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
-vim.opt.colorcolumn = "80"
+--vim.opt.colorcolumn = "80"
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-vim.api.nvim_set_option("clipboard", "unnamed")
+vim.opt.clipboard="unnamedplus"
+--vim.api.nvim_set_option("clipboard", "unnamed")
 
 --print("cb started")
-vim.opt.clipboard:append({ "unnamed", "unnamedplus" })
-vim.api.nvim_set_option("clipboard", "unnamed")
-
+--vim.opt.clipboard:append({ "unnamed", "unnamedplus" })
+--vim.api.nvim_set_option("clipboard", "unnamed")
 --print("set is being sourced")
-print("set.lua was sourced")
+--print("set.lua was sourced")
 

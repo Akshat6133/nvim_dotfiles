@@ -1,4 +1,8 @@
-vim.keymap.set("n","<leader><leader>", vim.cmd.Ex)
+vim.keymap.set("n", "<C-x>", ":Explore<CR>", { noremap = true, silent = true })
+-- Map '\' to toggle NERDTree
+--vim.keymap.set("n", "\\", ":NERDTreeToggle<CR>", { noremap = true, silent = true })
+
+vim.keymap.set("n", "\\", ":leftabove 30vsplit | Explore<CR>", { noremap = true, silent = true })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -78,5 +82,5 @@ vim.keymap.set("n", "<leader>f", function() require("conform").format({ bufnr = 
 --vim.keymap.set("n", "<leader><leader>", function()
 --    vim.cmd("so")
 --end)
-print("remap.lua was sourced")
+--print("remap.lua was sourced")
 

@@ -6,7 +6,8 @@
 --  let &t_EI = "\<Esc>[1 q" " normal: blinking block
 --]], false)
 
-vim.opt.guicursor = ""
+--vim.opt.guicursor = " "
+vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
 
 vim.opt.nu = true
 vim.opt.relativenumber = true
@@ -19,7 +20,7 @@ vim.opt.expandtab = false
 vim.opt.smartindent = true
 
 vim.opt.wrap = true
-
+vim.o.autowriteall = true
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
